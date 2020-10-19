@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../../../Tests/browsers_extensions_tests/my_beastify"
+		},
+		{
+			"path": "../webextensions-examples/find-across-tabs"
+		}
+	]
+}
