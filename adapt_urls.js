@@ -13,7 +13,8 @@ document.getElementById("adapt-urls-form").addEventListener(
         const oldprefix = document.getElementById("old-prefix").value;
         const newprefix = document.getElementById("new-prefix").value;
 
-        backgroundPage.adaptUrls(oldprefix, newprefix);
+        //backgroundPage.adaptUrls(oldprefix, newprefix);
+        backgroundPage.execute();
         ev.preventDefault();
     }
 );

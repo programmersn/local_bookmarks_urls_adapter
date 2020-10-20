@@ -1,16 +1,41 @@
-async function adaptUrls(oldprefix, newprefix) {
-    console.log(`Entering adaptUrls function with oldprefix=${oldprefix} and newprefix=${newprefix}`);
+function makeIndent(indentLength) {
+    return ".".repeat(indentLength);
+}
 
-    console.group("testing regexes");
-
-    const str = "file:///media/programmersn/NOUAIM/Studies/Documentation/Computer_science/Cybersecurity/Reverse_Engineering-Binary_Analysis-Exploitation/Learning%20Linux%20Binary%20Analysis_2016.pdf"
-    if (str.startsWith(oldprefix)) {
-        const res = str.replace(oldprefix, newprefix);
-        console.log(`${str} replaced with ${res}`);
+function logItems(bookmarkItem, indent) {
+    if (bookmarkItem.url) {
+        console.log(makeIndent(indent) + bookmarkItem.url);
+        const exampleURL = "file:///media/programmersn/NOUAIM/Studies/Documentation/Computer_science/Algorithmic_complexity/Inroduction_ebooks/Algorithms_A_Top-Down_Approach-Rodney_Howell.pdf";
+        const newURL     = "e:/Studies/Documentation/Computer_science/Algorithmic_complexity/Inroduction_ebooks/Algorithms_A_Top-Down_Approach-Rodney_Howell.pdf";
+        if (bookmarkItem.url === exampleURL) {
+            browser.bookmarks.update(bookmarkItem.id, {url: newURL});
+            console.log(`${makeIndent(indent)}--------------- CHANGED !!! ------------------`)
+        }
+    } else {
+        console.log(makeIndent(indent) + "Folder");
+        indent++;
     }
-    
-    console.groupEnd();
+    if (bookmarkItem.children) {
+        for (child of bookmarkItem.children) {
+            logItems(child, indent);
+        }
+    }
+    indent--;
+}
 
+function logTree(bookmarkItems) {
+    console.group("Recursively logging bookmarks tree ...");
+    logItems(bookmarkItems[0], 0);
+    console.groupEnd();
+}
+
+function onRejected(error) {
+    console.log(`An error: ${error}`);
+}
+
+function execute() {
+    var gettingTree = browser.bookmarks.getTree();
+    gettingTree.then(logTree, onRejected);
 }
 
 /*---------------------- Beginning flow of execution ------------------- */
