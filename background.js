@@ -1,45 +1,36 @@
-function makeIndent(indentLength) {
-    return ".".repeat(indentLength);
-}
 
-function logItems(bookmarkItem, indent, oldprefix, newprefix) {
-    //console.group(`Recursion with oldprefix=${oldprefix} and newprefix=${newprefix} ...`);
+function adaptUrlsRecursively(bookmarkItem, oldprefix, newprefix) {
     if (bookmarkItem.url) {
-        //console.log(makeIndent(indent) + bookmarkItem.url);
-        if (bookmarkItem.url.startsWith(oldprefix)) {
-            console.log (`$$$$$$$$$$$$$$$$$$ Changing bookmark ${bookmarkItem.url} $$$$$$$$$$$$$$$ `);
+        if (oldprefix.startsWith("file:///")) {
+            var oldprefixAlt = oldprefix.replace("file:///", "");
+        } else {
+            var oldprefixAlt = "file:///" + oldprefix;
+        }
+        if (bookmarkItem.url.startsWith(oldprefix) ||
+            bookmarkItem.url.startsWith(oldprefixAlt)) {
             const newUrl = bookmarkItem.url.replace(oldprefix, newprefix);
             browser.bookmarks.update(bookmarkItem.id, { url: newUrl });
-         //   console.log(`${makeIndent(indent)}--------------- CHANGED !!! ------------------`)
+            console.log(`$$$$$$$$$$$$$$$$$$ Changing bookmark ${bookmarkItem.url} $$$$$$$$$$$$$$$ `);
         }
-    } else {
-        //console.log(makeIndent(indent) + "Folder");
-        indent++;
     }
     if (bookmarkItem.children) {
         for (child of bookmarkItem.children) {
-            logItems(child, indent, oldprefix, newprefix);
+            adaptUrlsRecursively(child, oldprefix, newprefix);
         }
     }
-    indent--;
-    //console.groupEnd();
-}
-
-function logTree(bookmarkItems, oldprefix, newprefix) {
-    console.group(`Recursively logging bookmarks tree with oldprefix=${oldprefix} and newprefix=${newprefix} ...`);
-    logItems(bookmarkItems[0], 0, oldprefix, newprefix);
-    console.groupEnd();
 }
 
 function onRejected(error) {
     console.log(`An error: ${error}`);
 }
 
-function execute(oldprefix, newprefix) {
+function adaptUrls(oldprefix, newprefix) {
     var gettingTree = browser.bookmarks.getTree();
     gettingTree.then(
         function (bookmarkItems) {
-            logTree(bookmarkItems, oldprefix, newprefix);
+            console.group(`Recursively logging bookmarks tree with oldprefix=${oldprefix} and newprefix=${newprefix} ...`);
+            adaptUrlsRecursively(bookmarkItems[0], oldprefix, newprefix);
+            console.groupEnd();
         },
         onRejected);
 }

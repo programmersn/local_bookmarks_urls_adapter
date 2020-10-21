@@ -14,8 +14,7 @@ document.getElementById("adapt-urls-form").addEventListener(
         const newprefix = document.getElementById("new-prefix").value;
         
         console.group(`User inputs retrieved : oldprefix=${oldprefix} and newprefix=${newprefix} ...`);
-        //backgroundPage.adaptUrls(oldprefix, newprefix);
-        backgroundPage.execute(oldprefix, newprefix);
+        backgroundPage.adaptUrls(oldprefix, newprefix);
         ev.preventDefault();
     }
 );
