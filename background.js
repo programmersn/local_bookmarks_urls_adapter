@@ -41,7 +41,7 @@ console.log("Entering background.js");
 
 browser.browserAction.onClicked.addListener(
     function () {
-        console.log("Creating adapt_urls tab ...")
+        console.log("Creating adapt_urls tab ...");
         browser.tabs.create({ "url": "/adapt_urls.html" });
     }
 );
