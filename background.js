@@ -1,7 +1,7 @@
 
 function adaptUrlsRecursively(bookmarkItem, oldprefix, newprefix) {
     if (bookmarkItem.url) {
-        if (oldprefix.startsWith("file:///")) {
+        if (oldprefix.startsWith("file:///")) { // Do the same with newprefix : preprend 'file:///' to it
             var oldprefixAlt = oldprefix.replace("file:///", "");
         } else {
             var oldprefixAlt = "file:///" + oldprefix;

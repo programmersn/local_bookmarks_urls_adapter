@@ -1,0 +1,10 @@
+urls conversion from linux-style to windows-style :
+regex : (file:\/\/\/media\/programmersn\/NOUAIM\/Studies+)
+substitution: E:
+regex : [/]
+subtitution : \\
+
+urls conversion from windows-style to linux-style :
+
+
+
